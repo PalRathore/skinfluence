@@ -13,7 +13,6 @@ _Excellence in Dermatological Care Since 2010_
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![AngularJS](https://img.shields.io/badge/AngularJS-E23237?style=flat-square&logo=angularjs&logoColor=white)](https://angularjs.org/)
 
 [View Demo](#getting-started) · [Report Bug](../../issues) · [Request Feature](../../issues)
 
@@ -273,7 +272,7 @@ Contributions make the open-source community an incredible place to learn, inspi
 
 <div align="center">
 
-**Phone:** 0731-123456 &nbsp;&nbsp;|&nbsp;&nbsp; 
+
 **Email:** skinfluencewp@gmail.com
 
 ---
