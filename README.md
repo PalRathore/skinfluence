@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="Skinfluence/overall%20final/Homepage/skinfluence_logo-removebg-preview.png" alt="Skinfluence Logo" width="200"/>
-
 # Skinfluence
 
 ### Your Trusted Partner in Skin Health
