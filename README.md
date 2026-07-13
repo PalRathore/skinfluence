@@ -4,7 +4,6 @@
 
 ### Your Trusted Partner in Skin Health
 
-_Excellence in Dermatological Care Since 2010_
 
 <br/>
 
@@ -27,7 +26,6 @@ _Excellence in Dermatological Care Since 2010_
 - [Getting Started](#getting-started)
 - [Pages & Modules](#pages--modules)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ---
@@ -210,11 +208,11 @@ npx http-server "Skinfluence/overall final"
 
 Then open **`http://localhost:8000/Homepage/index.html`** in your browser.
 
-> **💡 Tip:** Using a local server is recommended for proper asset loading and authentication features.
+> **Tip:** Using a local server is recommended for proper asset loading and authentication features.
 
 ---
 
-## 📑 Pages & Modules
+## Pages & Modules
 
 | # | Page | Route | Description |
 |:---:|:---|:---|:---|
