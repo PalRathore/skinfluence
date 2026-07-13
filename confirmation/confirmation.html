@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - Skinfluence Dermatology</title>
+    <link rel="stylesheet" href="../Homepage/home.css">
+    <script src="../js/auth-service.js" defer></script>
+    <style>
+        .main-content {
+            margin: 50px auto;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .confirmation-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 50px;
+        }
+
+        h1 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .confirmation-message {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .booking-details {
+            background-color: #f0f7ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .booking-details h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            min-width: 150px;
+        }
+
+        .actions {
+            margin-top: 30px;
+        }
+
+        .button {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            margin: 0 10px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .button-primary {
+            background-color: #1e3c72;
+            color: white;
+        }
+
+        .button-primary:hover {
+            background-color: #4682B4;
+            box-shadow: 0 6px 15px rgba(30, 60, 114, 0.3);
+        }
+
+        .button-secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .button-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .download-receipt {
+            margin-top: 20px;
+            color: #1e3c72;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <header>
+        <div class="top-bar">
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <span>📞 0731-123456</span> <!-- Phone number -->
+                <span><a href="mailto:skinfluence@gmail.com">✉️ skinfluence@gmail.com</a></span> <!-- Email -->
+                <span>🕐 12 am to 8 pm</span> <!-- Working hours -->
+            </div>
+            <!-- Social Media Icons -->
+            <div class="social-icons">
+                <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+                    <img src="../Homepage/facebook.png" alt="Facebook" onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124010.png'" width="24" height="24">
+                </a>
+                <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+                    <img src="../Homepage/instagram.png" alt="Instagram" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174855.png'" width="24" height="24">
+                </a>
+                <a href="https://www.whatsapp.com" target="_blank" aria-label="WhatsApp">
+                    <img src="../Homepage/whatsapp.png" alt="WhatsApp" onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124034.png'" width="24" height="24">
+                </a>
+                <a href="https://www.youtube.com" target="_blank" aria-label="YouTube">
+                    <img src="../Homepage/youtube.png" alt="YouTube" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174883.png'" width="24" height="24">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <!-- Logo Section -->
+        <div class="logo">
+            <a href="../Homepage/index.html"><img src="../Homepage/skinfluence_logo-removebg-preview.png" alt="Skinfluence Logo"></a>
+        </div>
+        <!-- Navigation Links -->
+        <ul>
+            <li><a href="../about dr/about dr.html">About Us</a></li>
+            <li><a href="/registration/registration.html">Bookings</a></li>
+            <li><a href="../Homepage/index.html#explore">Explore</a></li>
+            <li><a href="/contactus/contactus.html">Contact Us</a></li>
+        </ul>
+        
+        <!-- Authentication & Profile Section -->
+        <div class="auth">
+            <a href="../login/login.html" class="login">Login</a>
+            <a href="../login/login.html" class="login">Signup</a>
+            <div class="profile-container">
+                <img src="../Homepage/profile icon.png" alt="Profile Icon" id="profileIcon">
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="../myacc.html">My Account</a>
+                    <a href="#">My Appointments</a>
+                    <a href="#">Help</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="confirmation-container">
+            <div class="success-icon">✓</div>
+            <h1>Booking Confirmed!</h1>
+            <p class="confirmation-message">Your appointment has been successfully booked. A confirmation email has been sent to your registered email address.</p>
+            
+            <div class="booking-details">
+                <h3>Appointment Details</h3>
+                <div class="detail-row">
+                    <div class="detail-label">Doctor:</div>
+                    <div id="doctor-name">-</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Date:</div>
+                    <div id="appointment-date">-</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Time:</div>
+                    <div id="appointment-time">-</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Service:</div>
+                    <div id="appointment-service">-</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Payment Status:</div>
+                    <div style="color: #4CAF50; font-weight: 600;">Paid</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Transaction ID:</div>
+                    <div id="transaction-id">-</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Amount Paid:</div>
+                    <div>₹ <span id="amount-paid">-</span></div>
+                </div>
+            </div>
+            
+            <p class="download-receipt" id="download-receipt">Download Receipt</p>
+            
+            <div class="actions">
+                <a href="../Homepage/index.html" class="button button-secondary">Back to Home</a>
+                <a href="../appointments/my-appointments.html" class="button button-primary">View My Appointments</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-links">
+            <a href="../privacy-policy.html">Privacy Policy</a>
+            <a href="../terms-and-conditions.html">Terms &amp; Conditions</a>
+            <a href="../contactus/contactus.html">Contact Us</a>
+            <a href="../about dr/about dr.html">About Us</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Skinfluence Dermatology. All rights reserved.</p>
+            <p>Follow us on social media for updates!</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load booking details from sessionStorage
+            const bookingDetails = JSON.parse(sessionStorage.getItem('bookingDetails') || '{}');
+            const paymentDetails = JSON.parse(sessionStorage.getItem('paymentDetails') || '{}');
+            
+            // Populate booking details
+            document.getElementById('doctor-name').textContent = bookingDetails.doctor || '-';
+            document.getElementById('appointment-date').textContent = bookingDetails.date || '-';
+            document.getElementById('appointment-time').textContent = bookingDetails.time || '-';
+            document.getElementById('appointment-service').textContent = bookingDetails.service || '-';
+            
+            // Populate payment details
+            document.getElementById('transaction-id').textContent = paymentDetails.paymentId || 'PAY-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            document.getElementById('amount-paid').textContent = paymentDetails.amount || (bookingDetails.amount ? bookingDetails.amount + Math.round(bookingDetails.amount * 0.18) : 1770);
+            
+            // Generate receipt (simulated)
+            document.getElementById('download-receipt').addEventListener('click', function() {
+                alert('Receipt download started...');
+                // In a real implementation, this would generate a PDF or initiate a download
+            });
+            
+            // Header visibility on scroll
+            const header = document.querySelector('header');
+            let lastScrollY = window.scrollY;
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > lastScrollY && window.scrollY > 50) {
+                    header.classList.add('header-hidden');
+                } else if (window.scrollY < lastScrollY) {
+                    header.classList.remove('header-hidden');
+                }
+                lastScrollY = window.scrollY;
+            });
+
+            // Profile Icon Dropdown Toggle
+            const profileIcon = document.getElementById('profileIcon');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            if (profileIcon && dropdownMenu) {
+                profileIcon.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                });
+                
+                // Hide the dropdown menu if clicking anywhere outside of it
+                document.addEventListener('click', function() {
+                    if (dropdownMenu) {
+                        dropdownMenu.style.display = 'none';
+                    }
+                });
+            }
+
+            // Update auth UI if AuthService exists
+            if (typeof AuthService !== 'undefined') {
+                AuthService.updateAuthUI();
+            }
+
+            // Logout functionality
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    if (typeof AuthService !== 'undefined') {
+                        await AuthService.logout();
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

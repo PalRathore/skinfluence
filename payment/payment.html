@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment - Skinfluence Dermatology</title>
+    <link rel="stylesheet" href="../Homepage/home.css" />
+    <script src="../js/auth-service.js" defer></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+      /* Base styles for payment page */
+      .main-content {
+        margin: 40px auto;
+        max-width: 1000px;
+        padding: 0 20px;
+      }
+
+      .payment-container {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-bottom: 40px;
+      }
+
+      .payment-container h1 {
+        color: #1e3c72;
+        font-size: 28px;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 700;
+      }
+
+      /* Improved Payment Steps UI */
+      .payment-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+        position: relative;
+        padding: 0 40px;
+      }
+
+      .payment-steps::before {
+        content: "";
+        position: absolute;
+        top: 25px;
+        left: 10%;
+        width: 80%;
+        height: 4px;
+        background-color: #e9ecef;
+        z-index: 1;
+        border-radius: 4px;
+      }
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        width: 70px;
+      }
+
+      .step-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #6c757d;
+        margin-bottom: 12px;
+        transition: all 0.4s ease;
+        position: relative;
+        border: 3px solid white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .step-label {
+        font-size: 14px;
+        color: #6c757d;
+        transition: color 0.4s ease;
+        text-align: center;
+        font-weight: 500;
+      }
+
+      .step.active .step-circle {
+        background-color: #1e3c72;
+        color: white;
+        transform: scale(1.15);
+        box-shadow: 0 0 20px rgba(30, 60, 114, 0.4);
+      }
+
+      .step.active .step-label {
+        color: #1e3c72;
+        font-weight: 700;
+      }
+
+      .step.completed .step-circle {
+        background-color: #4caf50;
+        color: white;
+        border-color: #e8f5e9;
+      }
+
+      .step.completed .step-circle::after {
+        content: "✓";
+        font-size: 24px;
+      }
+
+      .step.completed .step-label {
+        color: #4caf50;
+      }
+
+      /* Step Content Container */
+      .step-content {
+        display: none;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+        border: 1px solid #e9ecef;
+      }
+
+      .step-content.active {
+        display: block;
+        animation: fadeSlideIn 0.5s ease;
+      }
+
+      @keyframes fadeSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Booking Summary */
+      .booking-summary {
+        background-color: white;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #1e3c72;
+      }
+
+      .booking-summary h3 {
+        color: #1e3c72;
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 12px;
+      }
+
+      .summary-row {
+        display: flex;
+        margin-bottom: 12px;
+        align-items: center;
+      }
+
+      .summary-label {
+        font-weight: 600;
+        min-width: 140px;
+        color: #495057;
+      }
+
+      /* Order Summary */
+      .order-summary {
+        background-color: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .order-summary h3 {
+        color: #1e3c72;
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 12px;
+      }
+
+      .order-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        color: #495057;
+      }
+
+      .order-total {
+        font-weight: 700;
+        font-size: 20px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 2px solid #e9ecef;
+        color: #1e3c72;
+      }
+
+      /* Payment Options */
+      .payment-option {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .payment-option:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        border-color: #d0d9e6;
+      }
+
+      .payment-option.selected {
+        border-color: #1e3c72;
+        background-color: #f0f7ff;
+        box-shadow: 0 8px 20px rgba(30, 60, 114, 0.15);
+      }
+
+      .payment-option-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .payment-option-icon img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      .payment-option-details {
+        flex: 1;
+      }
+
+      .payment-option-title {
+        font-weight: 600;
+        font-size: 18px;
+        margin-bottom: 6px;
+        color: #1e3c72;
+      }
+
+      .payment-option-description {
+        font-size: 14px;
+        color: #6c757d;
+      }
+
+      /* Credit Card Animation */
+      .card-animation-container {
+        perspective: 1000px;
+        width: 340px;
+        height: 210px;
+        margin: 30px auto;
+        position: relative;
+      }
+
+      .credit-card {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        border-radius: 16px;
+      }
+
+      .credit-card.flip {
+        transform: rotateY(180deg);
+      }
+
+      .credit-card-front,
+      .credit-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 16px;
+        padding: 25px;
+        box-sizing: border-box;
+        background-size: cover;
+        overflow: hidden;
+      }
+
+      .credit-card-front {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+      }
+
+      .credit-card-front::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle at 50% 80%,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(0, 0, 0, 0) 60%
+        );
+      }
+
+      .credit-card-back {
+        background: linear-gradient(135deg, #2a5298, #1e3c72);
+        color: white;
+        transform: rotateY(180deg);
+      }
+
+      .card-chip {
+        width: 50px;
+        height: 40px;
+        background: linear-gradient(135deg, #ffd700, #ffa500);
+        border-radius: 8px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card-chip::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: linear-gradient(
+            90deg,
+            transparent 50%,
+            rgba(255, 255, 255, 0.1) 50%
+          ),
+          linear-gradient(90deg, transparent 50%, rgba(255, 255, 255, 0.1) 50%);
+        background-size: 10px 100%, 5px 100%;
+        background-position: 0 0, 0 0;
+      }
+
+      .card-number {
+        font-size: 22px;
+        letter-spacing: 2px;
+        margin-bottom: 25px;
+        font-weight: 500;
+        text-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-holder {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+      }
+
+      .card-expiry {
+        font-size: 14px;
+        position: absolute;
+        bottom: 25px;
+        right: 25px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .card-stripe {
+        background-color: #000;
+        height: 50px;
+        margin: 25px 0;
+      }
+
+      .card-cvv {
+        background-color: #fff;
+        color: #000;
+        height: 40px;
+        border-radius: 4px;
+        text-align: right;
+        padding: 10px;
+        margin-top: 15px;
+        font-size: 16px;
+        letter-spacing: 2px;
+      }
+
+      /* Credit Card Form */
+      .credit-card-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 25px 30px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #495057;
+        font-size: 15px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus {
+        border-color: #1e3c72;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+      }
+
+      .form-row {
+        display: flex;
+        gap: 20px;
+      }
+
+      /* UPI Animation */
+      .upi-animation-container {
+        width: 300px;
+        height: 300px;
+        margin: 30px auto;
+        position: relative;
+        display: none;
+      }
+
+      .upi-animation-container.visible {
+        display: block;
+      }
+
+      .upi-app {
+        width: 90px;
+        height: 90px;
+        position: absolute;
+        border-radius: 18px;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+
+      .upi-app:hover {
+        transform: scale(1.05);
+      }
+
+      .upi-app img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+      }
+
+      .upi-app:nth-child(1) {
+        top: 0;
+        left: 105px;
+      }
+
+      .upi-app:nth-child(2) {
+        top: 105px;
+        left: 0;
+      }
+
+      .upi-app:nth-child(3) {
+        top: 105px;
+        right: 0;
+      }
+
+      .upi-app:nth-child(4) {
+        bottom: 0;
+        left: 105px;
+      }
+
+      .upi-app.selected {
+        transform: scale(1.15);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+        border: 3px solid #1e3c72;
+      }
+
+      .upi-animation-active .upi-app:not(.selected) {
+        opacity: 0.6;
+        transform: scale(0.9);
+      }
+
+      /* UPI Form */
+      .upi-form {
+        max-width: 500px;
+        margin: 30px auto 0;
+        padding: 25px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .upi-id-input {
+        display: flex;
+        gap: 10px;
+      }
+
+      .upi-id-input input {
+        flex: 1;
+        padding: 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 16px;
+      }
+
+      .upi-id-input input:focus {
+        border-color: #1e3c72;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+      }
+
+      .upi-id-input button {
+        background-color: #1e3c72;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .upi-id-input button:hover {
+        background-color: #2a5298;
+        box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
+      }
+
+      /* Processing Animation */
+      .processing-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 0;
+        text-align: center;
+      }
+
+      .processing-spinner {
+        width: 80px;
+        height: 80px;
+        border: 8px solid #e9ecef;
+        border-top: 8px solid #1e3c72;
+        border-radius: 50%;
+        animation: spin 1.2s linear infinite;
+        margin-bottom: 30px;
+      }
+
+      .processing-message {
+        font-size: 22px;
+        color: #1e3c72;
+        font-weight: 600;
+        margin-bottom: 25px;
+      }
+
+      .processing-status {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 400px;
+        gap: 15px;
+      }
+
+      .status-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        background-color: white;
+        border-radius: 10px;
+        opacity: 0.6;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: translateY(5px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .status-item.active {
+        opacity: 1;
+        transform: translateY(0);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .status-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #e9ecef;
+        margin-right: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .status-icon.success {
+        background-color: #4caf50;
+      }
+
+      .status-icon.processing {
+        background-color: #1e3c72;
+        animation: pulse 1.5s infinite;
+      }
+
+      .status-text {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      /* Success Animation */
+      .success-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      .success-checkmark {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #4caf50;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+        animation: scaleInBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .success-message {
+        font-size: 28px;
+        color: #4caf50;
+        font-weight: 700;
+        margin-bottom: 15px;
+      }
+
+      .success-details {
+        font-size: 18px;
+        color: #495057;
+        margin-bottom: 30px;
+        max-width: 500px;
+      }
+
+      .transaction-id {
+        font-size: 15px;
+        background-color: #e9ecef;
+        padding: 10px 20px;
+        border-radius: 30px;
+        margin-bottom: 40px;
+        color: #495057;
+        font-weight: 500;
+      }
+
+      /* Navigation Buttons */
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+      }
+
+      .nav-button {
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+      .nav-button-next {
+        background-color: #1e3c72;
+        color: white;
+      }
+
+      .nav-button-back {
+        background-color: #e9ecef;
+        color: #495057;
+      }
+
+      .nav-button-next:hover {
+        background-color: #2a5298;
+        box-shadow: 0 8px 20px rgba(30, 60, 114, 0.3);
+      }
+
+      .nav-button-back:hover {
+        background-color: #dee2e6;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .nav-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      /* Additional Animations */
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes scaleInBounce {
+        0% {
+          transform: scale(0);
+        }
+        70% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .payment-container {
+          padding: 25px 15px;
+        }
+
+        .payment-steps {
+          padding: 0 10px;
+        }
+
+        .payment-steps::before {
+          left: 15%;
+          width: 70%;
+        }
+
+        .step {
+          width: 60px;
+        }
+
+        .step-circle {
+          width: 45px;
+          height: 45px;
+        }
+
+        .step-label {
+          font-size: 12px;
+        }
+
+        .card-animation-container {
+          width: 280px;
+          height: 170px;
+        }
+
+        .upi-animation-container {
+          width: 250px;
+          height: 250px;
+        }
+
+        .upi-app {
+          width: 75px;
+          height: 75px;
+        }
+
+        .upi-app:nth-child(1) {
+          left: 87.5px;
+        }
+
+        .upi-app:nth-child(2) {
+          top: 87.5px;
+        }
+
+        .upi-app:nth-child(3) {
+          top: 87.5px;
+        }
+
+        .upi-app:nth-child(4) {
+          left: 87.5px;
+        }
+
+        .form-row {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .nav-button {
+          padding: 12px 20px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar -->
+    <header>
+      <div class="top-bar">
+        <!-- Contact Information -->
+        <div class="contact-info">
+          <span>📞 0731-123456</span>
+          <!-- Phone number -->
+          <span
+            ><a href="mailto:skinfluence@gmail.com"
+              >✉️ skinfluence@gmail.com</a
+            ></span
+          >
+          <!-- Email -->
+          <span>🕐 12 am to 8 pm</span>
+          <!-- Working hours -->
+        </div>
+        <!-- Social Media Icons -->
+        <div class="social-icons">
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            aria-label="Facebook"
+          >
+            <img
+              src="../Homepage/facebook.png"
+              alt="Facebook"
+              onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124010.png'"
+              width="24"
+              height="24"
+            />
+          </a>
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            aria-label="Instagram"
+          >
+            <img
+              src="../Homepage/instagram.png"
+              alt="Instagram"
+              onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174855.png'"
+              width="24"
+              height="24"
+            />
+          </a>
+          <a
+            href="https://www.whatsapp.com"
+            target="_blank"
+            aria-label="WhatsApp"
+          >
+            <img
+              src="../Homepage/whatsapp.png"
+              alt="WhatsApp"
+              onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124034.png'"
+              width="24"
+              height="24"
+            />
+          </a>
+          <a
+            href="https://www.youtube.com"
+            target="_blank"
+            aria-label="YouTube"
+          >
+            <img
+              src="../Homepage/youtube.png"
+              alt="YouTube"
+              onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174883.png'"
+              width="24"
+              height="24"
+            />
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+      <!-- Logo Section -->
+      <div class="logo">
+        <a href="../Homepage/index.html"
+          ><img
+            src="../Homepage/skinfluence_logo-removebg-preview.png"
+            alt="Skinfluence Logo"
+        /></a>
+      </div>
+      <!-- Navigation Links -->
+      <ul>
+        <li><a href="../about dr/about dr.html">About Us</a></li>
+        <li><a href="../bookings/bookings.html">Bookings</a></li>
+        <li><a href="../Homepage/index.html#features">Explore</a></li>
+        <li><a href="../contactus/contactus.html">Contact Us</a></li>
+      </ul>
+
+      <!-- Authentication & Profile Section -->
+      <div class="auth">
+        <a href="../login/login.html" class="login">Login</a>
+        <a href="../login/login.html" class="login">Signup</a>
+        <div class="profile-container">
+          <img
+            src="../Homepage/profile icon.png"
+            alt="Profile Icon"
+            id="profileIcon"
+          />
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="../myacc.html">My Account</a>
+            <a href="../appointments/my-appointments.html">My Appointments</a>
+            <a href="../contactus/contactus.html">Help</a>
+            <a href="#" id="logoutBtn">Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="payment-container">
+        <h1>Complete Your Payment</h1>
+
+        <!-- Payment Steps -->
+        <div class="payment-steps">
+          <div class="step active" id="step-1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Details</div>
+          </div>
+          <div class="step" id="step-2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Payment</div>
+          </div>
+          <div class="step" id="step-3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Process</div>
+          </div>
+          <div class="step" id="step-4">
+            <div class="step-circle">4</div>
+            <div class="step-label">Confirm</div>
+          </div>
+        </div>
+
+        <!-- Step 1: Booking Summary -->
+        <div class="step-content active" id="step-1-content">
+          <div class="booking-summary">
+            <h3 style="margin-bottom: 15px; color: #1e3c72">
+              Appointment Details
+            </h3>
+            <div class="summary-row">
+              <div class="summary-label">Doctor:</div>
+              <div id="doctor-name">-</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-label">Date:</div>
+              <div id="appointment-date">-</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-label">Time:</div>
+              <div id="appointment-time">-</div>
+            </div>
+            <div class="summary-row">
+              <div class="summary-label">Service:</div>
+              <div id="appointment-service">-</div>
+            </div>
+          </div>
+
+          <div class="order-summary">
+            <h3 style="margin-bottom: 15px; color: #1e3c72">Order Summary</h3>
+            <div class="order-row">
+              <div>Consultation Fee</div>
+              <div>₹ <span id="consultation-fee">1500</span></div>
+            </div>
+            <div class="order-row">
+              <div>GST (18%)</div>
+              <div>₹ <span id="tax-amount">270</span></div>
+            </div>
+            <div class="order-row order-total">
+              <div>Total Amount</div>
+              <div>₹ <span id="total-amount">1770</span></div>
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-button nav-button-back" id="back-to-booking">
+              Back to Booking
+            </button>
+            <button class="nav-button nav-button-next" id="go-to-payment">
+              Continue to Payment
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Payment Method Selection -->
+        <div class="step-content" id="step-2-content">
+          <h3 style="margin-bottom: 15px; color: #1e3c72">
+            Select Payment Method
+          </h3>
+
+          <!-- Payment Options -->
+          <div class="payment-options">
+            <!-- Credit/Debit Card Option -->
+            <div class="payment-option" data-payment="card">
+              <div class="payment-option-icon">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/179/179457.png"
+                  alt="Credit Card"
+                />
+              </div>
+              <div class="payment-option-details">
+                <div class="payment-option-title">Credit/Debit Card</div>
+                <div class="payment-option-description">
+                  Pay securely with your credit or debit card
+                </div>
+              </div>
+              <label class="radio-container">
+                <input type="radio" name="payment-method" value="card" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <!-- UPI Option -->
+            <div class="payment-option" data-payment="upi">
+              <div class="payment-option-icon">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/4108/4108042.png"
+                  alt="UPI"
+                />
+              </div>
+              <div class="payment-option-details">
+                <div class="payment-option-title">UPI Payment</div>
+                <div class="payment-option-description">
+                  Pay using Google Pay, PhonePe, or other UPI apps
+                </div>
+              </div>
+              <label class="radio-container">
+                <input type="radio" name="payment-method" value="upi" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <!-- Pay at Clinic Option -->
+            <div class="payment-option" data-payment="clinic">
+              <div class="payment-option-icon">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3500/3500833.png"
+                  alt="Clinic"
+                />
+              </div>
+              <div class="payment-option-details">
+                <div class="payment-option-title">Pay at Clinic</div>
+                <div class="payment-option-description">
+                  Pay during your visit to the clinic
+                </div>
+              </div>
+              <label class="radio-container">
+                <input type="radio" name="payment-method" value="clinic" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Credit Card Form -->
+          <div id="card-payment-section" style="display: none">
+            <div class="card-animation-container">
+              <div class="credit-card" id="credit-card">
+                <div class="credit-card-front">
+                  <div class="card-chip"></div>
+                  <div class="card-number" id="card-number-display">
+                    •••• •••• •••• ••••
+                  </div>
+                  <div class="card-holder" id="card-holder-display">
+                    CARD HOLDER
+                  </div>
+                  <div class="card-expiry" id="card-expiry-display">MM/YY</div>
+                </div>
+                <div class="credit-card-back">
+                  <div class="card-stripe"></div>
+                  <div class="card-cvv" id="card-cvv-display">•••</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="credit-card-form" id="card-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="card-number">Card Number</label>
+                  <input
+                    type="text"
+                    id="card-number"
+                    placeholder="1234 5678 9012 3456"
+                    maxlength="19"
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="card-name">Cardholder Name</label>
+                  <input type="text" id="card-name" placeholder="John Doe" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="expiry-date">Expiry Date</label>
+                  <input
+                    type="text"
+                    id="expiry-date"
+                    placeholder="MM/YY"
+                    maxlength="5"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="cvv">CVV</label>
+                  <input
+                    type="text"
+                    id="cvv"
+                    placeholder="123"
+                    maxlength="3"
+                    onfocus="flipCard(true)"
+                    onblur="flipCard(false)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- UPI Form -->
+          <div id="upi-payment-section" style="display: none">
+            <div class="upi-animation-container" id="upi-animation">
+              <div class="upi-app" id="gpay">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/6124/6124998.png"
+                  alt="Google Pay"
+                />
+              </div>
+              <div class="upi-app" id="phonepe">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/825/825455.png"
+                  alt="PhonePe"
+                />
+              </div>
+              <div class="upi-app" id="paytm">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/5977/5977576.png"
+                  alt="Paytm"
+                />
+              </div>
+              <div class="upi-app" id="other-upi">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/196/196566.png"
+                  alt="Other"
+                />
+              </div>
+            </div>
+
+            <div class="upi-form" id="upi-form">
+              <div class="upi-id-input">
+                <input
+                  type="text"
+                  id="upi-id"
+                  placeholder="Enter your UPI ID (e.g. name@upi)"
+                />
+                <button class="button button-primary" id="verify-upi">
+                  Verify
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-button nav-button-back" id="back-to-details">
+              Back
+            </button>
+            <button
+              class="nav-button nav-button-next"
+              id="proceed-to-payment"
+              disabled
+            >
+              Proceed to Pay
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Processing Payment -->
+        <div class="step-content" id="step-3-content">
+          <div class="processing-container" id="processing-view">
+            <div class="processing-spinner"></div>
+            <div class="processing-message">Processing your payment</div>
+            <div class="processing-status">
+              <div class="status-item active">
+                <div class="status-icon success">✓</div>
+                <div class="status-text">Payment initiated</div>
+              </div>
+              <div class="status-item">
+                <div class="status-icon processing" id="connecting-icon"></div>
+                <div class="status-text">Connecting to payment gateway</div>
+              </div>
+              <div class="status-item">
+                <div class="status-icon" id="verifying-icon"></div>
+                <div class="status-text">Verifying payment</div>
+              </div>
+              <div class="status-item">
+                <div class="status-icon" id="confirming-icon"></div>
+                <div class="status-text">Confirming appointment</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Payment Success -->
+        <div class="step-content" id="step-4-content">
+          <div class="success-container" id="success-view">
+            <div class="success-checkmark">✓</div>
+            <div class="success-message">Payment Successful!</div>
+            <div class="success-details">
+              Your appointment has been confirmed.
+            </div>
+            <div class="transaction-id">
+              Transaction ID:
+              <span id="transaction-id-display">TXN12345678</span>
+            </div>
+
+            <div class="booking-summary">
+              <h3 style="margin-bottom: 15px; color: #1e3c72">
+                Appointment Confirmed
+              </h3>
+              <div class="summary-row">
+                <div class="summary-label">Doctor:</div>
+                <div id="success-doctor-name">-</div>
+              </div>
+              <div class="summary-row">
+                <div class="summary-label">Date:</div>
+                <div id="success-appointment-date">-</div>
+              </div>
+              <div class="summary-row">
+                <div class="summary-label">Time:</div>
+                <div id="success-appointment-time">-</div>
+              </div>
+              <div class="summary-row">
+                <div class="summary-label">Amount Paid:</div>
+                <div>₹ <span id="success-amount">-</span></div>
+              </div>
+            </div>
+
+            <div class="step-navigation">
+              <button class="nav-button nav-button-next" id="view-appointment">
+                View My Appointments
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+      <div class="footer-links">
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms-and-conditions.html">Terms &amp; Conditions</a>
+        <a href="../contactus/contactus.html">Contact Us</a>
+        <a href="../about dr/about dr.html">About Us</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Skinfluence Dermatology. All rights reserved.</p>
+        <p>Follow us on social media for updates!</p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Load booking details from sessionStorage
+        const bookingDetails = JSON.parse(
+          sessionStorage.getItem("bookingDetails") || "{}"
+        );
+
+        // Populate booking summary
+        document.getElementById("doctor-name").textContent =
+          bookingDetails.doctor || "-";
+        document.getElementById("appointment-date").textContent =
+          bookingDetails.date || "-";
+        document.getElementById("appointment-time").textContent =
+          bookingDetails.time || "-";
+        document.getElementById("appointment-service").textContent =
+          bookingDetails.service || "-";
+
+        // Calculate and update payment summary
+        const consultationFee = bookingDetails.amount || 1500;
+        const taxAmount = Math.round(consultationFee * 0.18);
+        const totalAmount = consultationFee + taxAmount;
+
+        document.getElementById("consultation-fee").textContent =
+          consultationFee;
+        document.getElementById("tax-amount").textContent = taxAmount;
+        document.getElementById("total-amount").textContent = totalAmount;
+
+        // ===== Step Navigation =====
+        const steps = ["step-1", "step-2", "step-3", "step-4"];
+        const contentSteps = [
+          "step-1-content",
+          "step-2-content",
+          "step-3-content",
+          "step-4-content",
+        ];
+        let currentStep = 0;
+
+        function goToStep(stepIndex) {
+          // Hide all steps and mark them inactive
+          steps.forEach((step, index) => {
+            document
+              .getElementById(step)
+              .classList.remove("active", "completed");
+            document
+              .getElementById(contentSteps[index])
+              .classList.remove("active");
+          });
+
+          // Mark previous steps as completed
+          for (let i = 0; i < stepIndex; i++) {
+            document.getElementById(steps[i]).classList.add("completed");
+          }
+
+          // Mark current step as active
+          document.getElementById(steps[stepIndex]).classList.add("active");
+          document
+            .getElementById(contentSteps[stepIndex])
+            .classList.add("active");
+
+          currentStep = stepIndex;
+        }
+
+        // Navigation buttons
+        document
+          .getElementById("back-to-booking")
+          .addEventListener("click", function () {
+            window.location.href = "../bookings/bookings.html";
+          });
+
+        document
+          .getElementById("go-to-payment")
+          .addEventListener("click", function () {
+            goToStep(1);
+          });
+
+        document
+          .getElementById("back-to-details")
+          .addEventListener("click", function () {
+            goToStep(0);
+          });
+
+        // ===== Payment Method Selection =====
+        const paymentOptions = document.querySelectorAll(".payment-option");
+        const cardPaymentSection = document.getElementById(
+          "card-payment-section"
+        );
+        const upiPaymentSection = document.getElementById(
+          "upi-payment-section"
+        );
+        const proceedToPayBtn = document.getElementById("proceed-to-payment");
+        let selectedPaymentMethod = null;
+
+        paymentOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            // Clear previous selection
+            paymentOptions.forEach((opt) => opt.classList.remove("selected"));
+            cardPaymentSection.style.display = "none";
+            upiPaymentSection.style.display = "none";
+
+            // Set new selection
+            this.classList.add("selected");
+            this.querySelector('input[type="radio"]').checked = true;
+            selectedPaymentMethod = this.getAttribute("data-payment");
+
+            // Enable proceed button
+            proceedToPayBtn.disabled = false;
+
+            // Show appropriate form with improved visibility
+            if (selectedPaymentMethod === "card") {
+              cardPaymentSection.style.display = "block";
+            } else if (selectedPaymentMethod === "upi") {
+              upiPaymentSection.style.display = "block";
+              document.getElementById("upi-animation").classList.add("visible");
+            }
+          });
+        });
+
+        // ===== Credit Card Animations =====
+        const creditCard = document.getElementById("credit-card");
+        const cardNumberInput = document.getElementById("card-number");
+        const cardNameInput = document.getElementById("card-name");
+        const expiryDateInput = document.getElementById("expiry-date");
+        const cvvInput = document.getElementById("cvv");
+
+        const cardNumberDisplay = document.getElementById(
+          "card-number-display"
+        );
+        const cardHolderDisplay = document.getElementById(
+          "card-holder-display"
+        );
+        const cardExpiryDisplay = document.getElementById(
+          "card-expiry-display"
+        );
+        const cardCvvDisplay = document.getElementById("card-cvv-display");
+
+        // Format and update card number
+        cardNumberInput.addEventListener("input", function (e) {
+          let value = e.target.value.replace(/\D/g, "");
+          if (value.length > 0) {
+            value = value.match(/.{1,4}/g).join(" ");
+          }
+          e.target.value = value;
+
+          // Update display
+          cardNumberDisplay.textContent = value || "•••• •••• •••• ••••";
+        });
+
+        // Update card holder name
+        cardNameInput.addEventListener("input", function (e) {
+          cardHolderDisplay.textContent =
+            e.target.value.toUpperCase() || "CARD HOLDER";
+        });
+
+        // Format and update expiry date
+        expiryDateInput.addEventListener("input", function (e) {
+          let value = e.target.value.replace(/\D/g, "");
+          if (value.length > 2) {
+            value = value.slice(0, 2) + "/" + value.slice(2);
+          }
+          e.target.value = value;
+
+          // Update display
+          cardExpiryDisplay.textContent = value || "MM/YY";
+        });
+
+        // Update CVV
+        cvvInput.addEventListener("input", function (e) {
+          cardCvvDisplay.textContent = e.target.value || "•••";
+        });
+
+        // Flip card when focused on CVV
+        window.flipCard = function (flip) {
+          if (flip) {
+            creditCard.classList.add("flip");
+          } else {
+            creditCard.classList.remove("flip");
+          }
+        };
+
+        // ===== UPI App Selection =====
+        const upiApps = document.querySelectorAll(".upi-app");
+        const upiAnimation = document.getElementById("upi-animation");
+        let selectedUpiApp = null;
+
+        upiApps.forEach((app) => {
+          app.addEventListener("click", function () {
+            upiApps.forEach((a) => a.classList.remove("selected"));
+            this.classList.add("selected");
+            upiAnimation.classList.add("upi-animation-active");
+            selectedUpiApp = this.id;
+          });
+        });
+
+        // UPI Verification
+        const upiIdInput = document.getElementById("upi-id");
+        const verifyUpiBtn = document.getElementById("verify-upi");
+
+        verifyUpiBtn.addEventListener("click", function () {
+          const upiId = upiIdInput.value;
+          if (upiId.includes("@")) {
+            verifyUpiBtn.textContent = "Verified ✓";
+            verifyUpiBtn.style.backgroundColor = "#4CAF50";
+          } else {
+            alert("Please enter a valid UPI ID");
+          }
+        });
+
+        // ===== Process Payment =====
+        proceedToPayBtn.addEventListener("click", function () {
+          if (!selectedPaymentMethod) {
+            alert("Please select a payment method");
+            return;
+          }
+
+          // Validate form based on payment method
+          if (selectedPaymentMethod === "card") {
+            const cardNumber = cardNumberInput.value;
+            const cardName = cardNameInput.value;
+            const expiryDate = expiryDateInput.value;
+            const cvv = cvvInput.value;
+
+            if (!cardNumber || !cardName || !expiryDate || !cvv) {
+              alert("Please fill in all card details");
+              return;
+            }
+          } else if (selectedPaymentMethod === "upi") {
+            const upiId = upiIdInput.value;
+            if (!upiId || !upiId.includes("@")) {
+              alert("Please enter a valid UPI ID");
+              return;
+            }
+
+            if (!selectedUpiApp) {
+              alert("Please select a UPI app");
+              return;
+            }
+          }
+
+          const loggedInUser = localStorage.getItem("loggedUser")
+            ? JSON.parse(localStorage.getItem("loggedUser"))
+            : {};
+          const doctorsData = localStorage.getItem("doctors")
+            ? JSON.parse(localStorage.getItem("doctors"))
+            : [];
+          if (loggedInUser && doctorsData) {
+            const remainUser = doctorsData.filter(
+              (el) => el.email !== loggedInUser.email
+            );
+
+            const user = {
+              ...loggedInUser,
+              appoitment: loggedInUser?.appoitment
+                ? [
+                    {
+                      doctor: bookingDetails.doctor || "-",
+                      date: bookingDetails.date || "-",
+                      time: bookingDetails.time || "-",
+                      service: bookingDetails.service || "-",
+                    },
+                    ...loggedInUser?.appoitment,
+                  ]
+                : [
+                    {
+                      doctor: bookingDetails.doctor || "-",
+                      date: bookingDetails.date || "-",
+                      time: bookingDetails.time || "-",
+                      service: bookingDetails.service || "-",
+                    },
+                  ],
+            };
+
+            const data = [user, ...remainUser];
+            localStorage.setItem("loggedUser", JSON.stringify(user));
+            localStorage.setItem("doctors", JSON.stringify(data));
+          }
+
+          // Move to processing step
+          goToStep(2);
+
+          // Simulate payment processing
+          const processingView = document.getElementById("processing-view");
+          processingView.style.display = "flex";
+
+          // Staged processing status updates
+          setTimeout(() => {
+            document
+              .getElementById("connecting-icon")
+              .classList.remove("processing");
+            document.getElementById("connecting-icon").classList.add("success");
+            document.getElementById("connecting-icon").innerHTML = "✓";
+            document
+              .getElementById("verifying-icon")
+              .classList.add("processing");
+            document
+              .querySelectorAll(".status-item")[2]
+              .classList.add("active");
+          }, 1500);
+
+          setTimeout(() => {
+            document
+              .getElementById("verifying-icon")
+              .classList.remove("processing");
+            document.getElementById("verifying-icon").classList.add("success");
+            document.getElementById("verifying-icon").innerHTML = "✓";
+            document
+              .getElementById("confirming-icon")
+              .classList.add("processing");
+            document
+              .querySelectorAll(".status-item")[3]
+              .classList.add("active");
+          }, 3000);
+
+          setTimeout(() => {
+            document
+              .getElementById("confirming-icon")
+              .classList.remove("processing");
+            document.getElementById("confirming-icon").classList.add("success");
+            document.getElementById("confirming-icon").innerHTML = "✓";
+
+            // Prepare success view
+            document.getElementById("success-doctor-name").textContent =
+              bookingDetails.doctor || "-";
+            document.getElementById("success-appointment-date").textContent =
+              bookingDetails.date || "-";
+            document.getElementById("success-appointment-time").textContent =
+              bookingDetails.time || "-";
+            document.getElementById("success-amount").textContent = totalAmount;
+
+            // Generate random transaction ID
+            const txnId =
+              "TXN" + Math.random().toString(36).substr(2, 9).toUpperCase();
+            document.getElementById("transaction-id-display").textContent =
+              txnId;
+
+            // Store payment info for confirmation
+            sessionStorage.setItem(
+              "paymentDetails",
+              JSON.stringify({
+                paymentId: txnId,
+                amount: totalAmount,
+                timestamp: new Date().toISOString(),
+                method: selectedPaymentMethod,
+              })
+            );
+
+            // Move to success step
+            setTimeout(() => {
+              goToStep(3);
+              document.getElementById("success-view").style.display = "flex";
+            }, 1000);
+          }, 4500);
+        });
+
+        // View appointment button
+        document
+          .getElementById("view-appointment")
+          .addEventListener("click", function () {
+            window.location.href = "../confirmation/confirmation.html";
+          });
+
+        // ===== Header and Profile Logic =====
+        const profileIcon = document.getElementById("profileIcon");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+
+        if (profileIcon && dropdownMenu) {
+          profileIcon.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdownMenu.style.display =
+              dropdownMenu.style.display === "block" ? "none" : "block";
+          });
+
+          // Hide the dropdown menu if clicking anywhere outside of it
+          document.addEventListener("click", function () {
+            if (dropdownMenu) {
+              dropdownMenu.style.display = "none";
+            }
+          });
+        }
+
+        // Update auth UI if AuthService exists
+        if (typeof AuthService !== "undefined") {
+          AuthService.updateAuthUI();
+        }
+
+        // Logout functionality
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", async function (e) {
+            e.preventDefault();
+            if (typeof AuthService !== "undefined") {
+              await AuthService.logout();
+              window.location.reload();
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

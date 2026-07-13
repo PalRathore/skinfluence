@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta Tags for character set, responsiveness, SEO -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Skinfluence Dermatology - Your one-stop destination for all skin problems.">
+  <meta name="keywords" content="Dermatology, Skin Care, Health, Beauty">
+  <title>Skinfluence Dermatology</title>
+  <link rel="stylesheet" href="home.css">
+  <script src="/js/auth-service.js" defer></script>
+</head>
+<body>
+  <!-- Top Bar -->
+  <header>
+    <div class="top-bar">
+      <!-- Contact Information -->
+      <div class="contact-info">
+        <span>📞 0731-123456</span> <!-- Phone number -->
+        <span><a href="mailto:skinfluence@gmail.com">✉️ skinfluence@gmail.com</a></span> <!-- Email -->
+        <span>🕐 12 am to 8 pm</span> <!-- Working hours -->
+      </div>
+      <!-- Social Media Icons -->
+      <div class="social-icons">
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+          <img src="facebook.png" alt="Facebook"> <!-- Facebook Icon -->
+        </a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+          <img src="instagram.png" alt="Instagram"> <!-- Instagram Icon -->
+        </a>
+        <a href="https://www.whatsapp.com" target="_blank" aria-label="WhatsApp">
+          <img src="whatsapp.png" alt="WhatsApp"> <!-- WhatsApp Icon -->
+        </a>
+        <a href="https://www.youtube.com" target="_blank" aria-label="YouTube">
+          <img src="youtube.png" alt="YouTube"> <!-- YouTube Icon -->
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <!-- Logo Section -->
+    <div class="logo">
+      <a href="../Homepage/index.html"><img src="skinfluence_logo-removebg-preview.png" alt="Skinfluence Logo"></a>
+    </div>
+    <!-- Navigation Links -->
+    <ul>
+      <li><a href="../about dr/about dr.html">About Us</a></li>
+      <li><a href="../bookings/bookings.html">Bookings</a></li>
+      <li><a href="#features">Explore</a></li>
+      <li><a href="../contactus/contactus.html">Contact Us</a></li>
+    </ul>
+    
+    <!-- Authentication & Profile Section -->
+    <div class="auth">
+      <a href="../login/login.html" class="login">Login</a>
+      <a href="../login/login.html" class="login">Signup</a>
+      <div class="profile-container">
+        <img src="profile icon.png" alt="Profile Icon" id="profileIcon">
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="../myacc.html">My Account</a>
+          <a href="../appointments/my-appointments.html">My Appointments</a>
+          <a href="../contactus/contactus.html">Help</a>
+          <a href="#" id="logoutBtn">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-container">
+        <!-- Hero Text Content -->
+        <div class="hero-text">
+          <h1><span class="highlight">One stop destination for all your skin problems.</span></h1>
+          <p>
+            Skinfluence, begins within!
+          </p>
+          <div class="hero-buttons">
+            <button class="explore-btn" onclick="location.href='#features';">EXPLORE</button>
+            <button class="book-btn" onclick="redirectToBooking()">BOOK NOW</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <!-- Feature Card: 24/7 Service -->
+      <div class="feature">
+        <img src="24.png" alt="24/7 Service">
+        <h2>24/7 SERVICE</h2>
+      </div>
+      <!-- Feature Card: 15 Years Experience -->
+      <div class="feature">
+        <img src="Exp.png" alt="Experience">
+        <h2>15 YEARS OF EXPERIENCE</h2>
+      </div>
+      <!-- Feature Card: Advance Booking -->
+      <div class="feature">
+        <img src="adv.png" alt="Advance Booking">
+        <h2>ADVANCE BOOKING</h2>
+      </div>
+      <!-- Feature Card: Satisfied Customers -->
+      <div class="feature">
+        <img src="cust.png" alt="Satisfied Customers">
+        <h2>SATISFIED CUSTOMERS</h2>
+      </div>
+    </section>
+
+    <!-- Why Choose Skinfluence Section (Step-Flow) -->
+    <section class="why-choose" id="why-choose">
+      <h2>Why Choose Skinfluence?</h2>
+      <div class="step-flow">
+        <!-- Step Card 1 -->
+        <div class="step-card">
+          <div class="icon-container">
+            <img src="doc-near-me.jpg" alt="Doctor Near Me" />
+          </div>
+          <h3>Doctor Near Me</h3>
+          <p>
+            Quickly find a doctor, hospital, or specialization near your location. 
+            Book clinic or video consultations.
+          </p>
+        </div>
+        <!-- Arrow between steps -->
+        <div class="arrow">
+          <span>&#10095;</span>
+        </div>
+        <!-- Step Card 2 -->
+        <div class="step-card">
+          <div class="icon-container">
+            <img src="know-doc.jpg" alt="Know Your Doctor" />
+          </div>
+          <h3>Know Your Doctor</h3>
+          <p>
+            Request appointments based on specialization and availability. 
+            Get to know your doctor's background &amp; expertise.
+          </p>
+        </div>
+        <!-- Arrow between steps -->
+        <div class="arrow">
+          <span>&#10095;</span>
+        </div>
+        <!-- Step Card 3 -->
+        <div class="step-card">
+          <div class="icon-container">
+            <img src="appoint_book.jpg" alt="Book Confirmed Appointment" />
+          </div>
+          <h3>Book Confirmed Appointment</h3>
+          <p>
+            Enjoy a seamless booking experience with instant confirmations, 
+            reminders, and easy rescheduling options.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <details>
+          <summary>What services do you offer?</summary>
+          <p>We provide a wide range of dermatology services—from skin consultations to advanced treatment procedures.</p>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>How do I book an appointment?</summary>
+          <p>You can easily book your appointment online by filling out our registration form.</p>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>What if I need to reschedule or cancel my appointment?</summary>
+          <p>You can reschedule or cancel your appointment by contacting our support team directly.</p>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>Do you accept insurance?</summary>
+          <p>Yes, we work with multiple insurance providers. Please contact us for more detailed information.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Meet Our Experts Section -->
+    <section class="meet-experts" id="experts">
+      <h2>Meet Our Experts</h2>
+      <div class="experts-container">
+        <!-- Expert Card 1 -->
+        <div class="expert-card">
+          <img src="doctor-female.jpg" alt="Dr. Jane Doe">
+          <h3>Dr. Jane Doe</h3>
+          <p>Chief Dermatologist</p>
+        </div>
+        <!-- Expert Card 2 -->
+        <div class="expert-card">
+          <img src="doctor-male.jpg" alt="Dr. John Smith">
+          <h3>Dr. John Smith</h3>
+          <p>Cosmetic Dermatologist</p>
+        </div>
+      </div>
+    </section>
+          
+    <!-- Parallax Section (Promotional Content) -->
+    <section class="fiximg">
+      <div class="parallax-overlay">
+        <h2>Your Journey to Radiant Skin Begins Here</h2>
+        <p>Book your appointment today and experience the best in dermatology.</p>
+        <button class="book-btn" onclick="redirectToBooking()">Get Started</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-links">
+      <a href="../privacy-policy.html">Privacy Policy</a>
+      <a href="../terms-and-conditions.html">Terms &amp; Conditions</a>
+      <a href="../contactus/contactus.html">Contact Us</a>
+      <a href="../about dr/about dr.html">About Us</a>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Skinfluence Dermatology. All rights reserved.</p>
+      <p>Follow us on social media for updates!</p>
+    </div>
+  </footer>
+
+  <script src="homepage.js"></script>
+  <script src="/js/auth-service.js"></script>
+  <script>
+    function redirectToBooking() {
+      window.location.href = '../bookings/bookings.html';
+    }
+  </script>
+</body>
+</html>

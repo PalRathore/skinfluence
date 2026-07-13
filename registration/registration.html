@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skinfluence - Book Your Appointment</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link rel="stylesheet" href="reg.css">
+</head>
+<body>
+  <!-- Top Bar -->
+  <header>
+    <div class="top-bar">
+      <!-- Contact Information -->
+      <div class="contact-info">
+        <span>📞 0731-123456</span> <!-- Phone number -->
+        <span><a href="mailto:skinfluence@gmail.com">✉️ skinfluence@gmail.com</a></span> <!-- Email -->
+        <span>🕐 12 am to 8 pm</span> <!-- Working hours -->
+      </div>
+      <!-- Social Media Icons -->
+      <div class="social-icons">
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+          <img src="facebook.png" alt="Facebook"> <!-- Facebook Icon -->
+        </a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+          <img src="instagram.png" alt="Instagram"> <!-- Instagram Icon -->
+        </a>
+        <a href="https://www.whatsapp.com" target="_blank" aria-label="WhatsApp">
+          <img src="whatsapp.png" alt="WhatsApp"> <!-- WhatsApp Icon -->
+        </a>
+        <a href="https://www.youtube.com" target="_blank" aria-label="YouTube">
+          <img src="youtube.png" alt="YouTube"> <!-- YouTube Icon -->
+        </a>
+      </div>
+    </div>
+  </header>
+  <!-- Navigation Bar -->
+<nav>
+  <!-- Logo Section -->
+  <div class="logo">
+    <a href="../Homepage/index.html"><img src="skinfluence_logo-removebg-preview.png" alt="Skinfluence Logo"></a>
+  </div>
+  <!-- Navigation Links -->
+  <ul>
+    <li><a href="../about dr/about dr.html">About Us</a></li>
+    <li><a href="../bookings/bookings.html">Bookings</a></li>
+    <li><a href="../Homepage/index.html#features">Explore</a></li>
+    <li><a href="../contactus/contactus.html">Contact Us</a></li>
+  </ul>
+  
+  <!-- Authentication & Profile Section -->
+  <div class="auth">
+    <a href="../login/login.html" class="login">Login</a>
+    <a href="../login/login.html" class="login">Signup</a>
+    <div class="profile-container">
+      <img src="profile icon.png" alt="Profile Icon" id="profileIcon">
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="../myacc.html">My Account</a>
+        <a href="../appointments/my-appointments.html">My Appointments</a>
+        <a href="../contactus/contactus.html">Help</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
+  </div>
+</nav>
+  
+  
+  <div class="container">
+    <div class="info-panel">
+      <div class="info-content">
+        <h2>Your Skin, Our Priority</h2>
+        <p>
+          Book your appointment with top dermatologists.<br />
+          Experience personalized care for every skin type.
+        </p>
+      </div>
+    </div>
+    
+    <div class="form-panel">
+      <h2>Appointment Registration</h2>
+      <form id="registrationForm">
+        <div class="input-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="John Doe" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        
+        <div class="input-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" placeholder="30" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="disease">Disease/Concern</label>
+          <select id="disease" name="disease" required>
+            <option value="">Select Concern</option>
+            <option value="acne">Acne</option>
+            <option value="eczema">Eczema</option>
+            <option value="psoriasis">Psoriasis</option>
+            <option value="rosacea">Rosacea</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        
+
+        
+        <div class="input-group full-width">
+          <label for="description">Describe Your Condition</label>
+          <textarea id="description" name="description" placeholder="Provide more details." style="font-family:Cambria"></textarea>
+        </div>
+        
+        <div class="input-group">
+          <label for="blood">Blood Group</label>
+          <select id="blood" name="blood">
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+        
+        <div class="input-group full-width">
+          <label for="address">Address</label>
+          <input type="text" id="address" name="address" placeholder="123 Main St, City">
+        </div>
+        
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="example@mail.com" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890" required>
+        </div>
+
+        <div class="input-group full-width">
+          <label for="previous-treatments">Previous Treatments (if any)</label>
+          <textarea id="previous-treatments" name="previous-treatments" placeholder="List any previous treatments you've received for this condition." style="font-family:Cambria"></textarea>
+          <small class="form-text">Optional</small>
+        </div>
+
+        <div class="input-group">
+          <label for="allergies">Known Allergies</label>
+          <input type="text" id="allergies" name="allergies" placeholder="Medications, foods, etc.">
+          <small class="form-text">Optional</small>
+        </div>
+
+        <div class="input-group">
+          <label for="medications">Current Medications</label>
+          <input type="text" id="medications" name="medications" placeholder="List any medications you're currently taking">
+          <small class="form-text">Optional</small>
+        </div>
+
+        <div class="upload-container full-width">
+          <label for="prescription-upload">Upload Previous Prescriptions (if any)</label>
+          <input type="file" id="prescription-upload" name="prescription-upload" accept=".pdf,.jpg,.jpeg,.png">
+          <p class="upload-help">Accepted formats: PDF, JPG, PNG (Max size: 5MB) - Optional</p>
+        </div>
+
+        <div class="upload-container full-width">
+          <label for="condition-photos">Upload Photos of Your Condition (Optional)</label>
+          <input type="file" id="condition-photos" name="condition-photos" accept=".jpg,.jpeg,.png" multiple>
+          <p class="upload-help">Clear photos help the doctor assess your condition before the appointment</p>
+        </div>
+
+        <button type="submit" id="submit-btn">Proceed to Booking</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div class="success-message">
+    Appointment booked successfully!
+  </div>
+  
+  <footer>
+    <div class="footer-links">
+      <a href="../privacy-policy.html">Privacy Policy</a>
+      <a href="../terms-and-conditions.html">Terms &amp; Conditions</a>
+      <a href="../contactus/contactus.html">Contact Us</a>
+      <a href="../about dr/about dr.html">About Us</a>
+    </div>
+  </footer>
+  
+  <script src = "reg.js">
+
+  </script>
+</body>
+</html>
+``` 

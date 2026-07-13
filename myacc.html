@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="skinfluenceApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Skinfluence Dermatology</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <link rel="stylesheet" href="Homepage/home.css">
+    <script src="js/auth-service.js" defer></script>
+    <style>
+        :root {
+            --primary: #1e3c72;
+            --primary-darker: #4682B4;
+            --accent: #e74c3c;
+            --dark: #34495e;
+            --light: #ecf0f1;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text: #2c3e50;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f8fa;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .page-title {
+            margin: 30px 0;
+            text-align: center;
+            color: var(--dark);
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        .profile-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .profile-sidebar {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .profile-sidebar:hover {
+            transform: translateY(-5px);
+        }
+        
+        .profile-photo-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .profile-photo-container:hover .profile-photo-overlay {
+            opacity: 1;
+        }
+        
+        .profile-photo-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .profile-photo-overlay i {
+            color: white;
+            font-size: 24px;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .profile-email {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .stat {
+            padding: 10px;
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .sidebar-nav {
+            margin-top: 30px;
+        }
+        
+        .sidebar-nav-item {
+            display: block;
+            padding: 12px 15px;
+            text-align: left;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .sidebar-nav-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-nav-item:hover {
+            background-color: var(--light);
+            transform: translateX(5px);
+        }
+        
+        .sidebar-nav-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .profile-content {
+            flex: 2;
+            min-width: 500px;
+        }
+        
+        .content-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow);
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .edit-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn i {
+            margin-right: 5px;
+        }
+        
+        .edit-btn:hover {
+            color: var(--primary-darker);
+            transform: translateX(3px);
+        }
+        
+        .info-group {
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            color: var(--text);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .appointment-item {
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .appointment-item:hover {
+            transform: translateX(5px);
+            background-color: #f0f7ff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .doctor-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .appointment-date {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .appointment-type {
+            color: var(--primary);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .appointment-status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-upcoming {
+            background-color: #e3f2fd;
+            color: var(--primary);
+        }
+        
+        .status-completed {
+            background-color: #e8f5e9;
+            color: var(--success);
+        }
+        
+        .status-cancelled {
+            background-color: #ffebee;
+            color: var(--accent);
+        }
+        
+        .prescription-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .prescription-item:hover {
+            transform: translateY(-3px);
+            background-color: #f0f7ff;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .prescription-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .prescription-icon i {
+            color: white;
+            font-size: 18px;
+        }
+        
+        .prescription-details {
+            flex-grow: 1;
+        }
+        
+        .prescription-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .prescription-date {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .prescription-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .prescription-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .prescription-btn:hover {
+            color: var(--primary-darker);
+            transform: scale(1.1);
+        }
+        
+        /* Account Hero section */
+        .account-hero {
+            position: relative;
+            background: linear-gradient(rgba(30, 60, 114, 0.8), rgba(30, 60, 114, 0.8)), 
+                        url('Homepage/parallax.png') no-repeat center center/cover;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .account-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .account-hero-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .account-hero-subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #ecf0f1;
+        }
+        
+        @media (max-width: 992px) {
+            .profile-container {
+                flex-direction: column;
+            }
+            
+            .profile-sidebar, .profile-content {
+                min-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        /* Font Awesome CDN */
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <header>
+        <div class="top-bar">
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <span>📞 0731-123456</span> <!-- Phone number -->
+                <span><a href="mailto:skinfluence@gmail.com">✉️ skinfluence@gmail.com</a></span> <!-- Email -->
+                <span>🕐 12 am to 8 pm</span> <!-- Working hours -->
+            </div>
+            <!-- Social Media Icons -->
+            <div class="social-icons">
+                <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+                    <img src="Homepage/facebook.png" alt="Facebook" onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124010.png'" width="24" height="24">
+                </a>
+                <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+                    <img src="Homepage/instagram.png" alt="Instagram" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174855.png'" width="24" height="24">
+                </a>
+                <a href="https://www.whatsapp.com" target="_blank" aria-label="WhatsApp">
+                    <img src="Homepage/whatsapp.png" alt="WhatsApp" onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124034.png'" width="24" height="24">
+                </a>
+                <a href="https://www.youtube.com" target="_blank" aria-label="YouTube">
+                    <img src="Homepage/youtube.png" alt="YouTube" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174883.png'" width="24" height="24">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <!-- Logo Section -->
+        <div class="logo">
+            <a href="Homepage/index.html"><img src="Homepage/skinfluence_logo-removebg-preview.png" alt="Skinfluence Logo"></a>
+        </div>
+        <!-- Navigation Links -->
+        <ul>
+            <li><a href="about dr/about dr.html">About Us</a></li>
+            <li><a href="bookings/bookings.html">Bookings</a></li>
+            <li><a href="Homepage/index.html#features">Explore</a></li>
+            <li><a href="contactus/contactus.html">Contact Us</a></li>
+        </ul>
+        
+        <!-- Authentication & Profile Section -->
+        <div class="auth">
+            <a href="login/login.html" class="login">Login</a>
+            <a href="login/login.html" class="login">Signup</a>
+            <div class="profile-container">
+                <img src="Homepage/profile icon.png" alt="Profile Icon" id="profileIcon">
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="myacc.html">My Account</a>
+                    <a href="appointments/my-appointments.html">My Appointments</a>
+                    <a href="contactus/contactus.html">Help</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Account Hero Section -->
+    <section class="account-hero">
+        <div class="account-hero-content">
+            <h1 class="account-hero-title">My Account Dashboard</h1>
+            <p class="account-hero-subtitle">Manage your profile, appointments, and prescriptions all in one place</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-photo-container">
+                    <img src="Homepage/profile icon.png" alt="Profile Photo" class="profile-photo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                    <div class="profile-photo-overlay">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <h2 class="profile-name" id="profileName">Loading...</h2>
+                <p class="profile-email" id="profileEmail">Loading...</p>
+                
+                <div class="profile-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="appointmentCount">0</div>
+                        <div class="stat-label">Appointments</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Prescriptions</div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav">
+                    <a href="#personal-info" class="sidebar-nav-item active">
+                        <i class="fas fa-user"></i> Personal Info
+                    </a>
+                    <a href="#appointments" class="sidebar-nav-item">
+                        <i class="fas fa-calendar-check"></i> Appointments
+                    </a>
+                    <a href="appointments/my-appointments.html" class="sidebar-nav-item">
+                        <i class="fas fa-notes-medical"></i> Medical Records
+                    </a>
+                    <a href="payment/payment.html" class="sidebar-nav-item">
+                        <i class="fas fa-prescription"></i> Prescriptions
+                    </a>
+                    <a href="payment/payment.html" class="sidebar-nav-item">
+                        <i class="fas fa-credit-card"></i> Billing & Payments
+                    </a>
+                    <a href="#" class="sidebar-nav-item">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <a href="#" id="sidebarLogoutBtn" class="sidebar-nav-item">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <div id="personal-info" class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Personal Information</h3>
+                        <button class="edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <div class="info-group">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value" id="profileName">Loading...</div>
+                        </div>
+                        
+                        <div class="info-group">
+                            <div class="info-label">Date of Birth</div>
+                            <div class="info-value">Loading...</div>
+                        </div>
+                        
+                        <div class="info-group">
+                            <div class="info-label">Gender</div>
+                            <div class="info-value">Loading...</div>
+                        </div>
+                        
+                        <div class="info-group">
+                            <div class="info-label">Phone Number</div>
+                            <div class="info-value">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Address Details</h3>
+                        <button class="edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Street Address</div>
+                        <div class="info-value">Loading...</div>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <div class="info-group">
+                            <div class="info-label">City</div>
+                            <div class="info-value">Loading...</div>
+                        </div>
+                        
+                        <div class="info-group">
+                            <div class="info-label">State</div>
+                            <div class="info-value">Loading...</div>
+                        </div>
+                        
+                        <div class="info-group">
+                            <div class="info-label">Postal Code</div>
+                            <div class="info-value">Loading...</div>
+                        </div>
+                        
+                        <div class="info-group">
+                            <div class="info-label">Country</div>
+                            <div class="info-value">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="appointments" class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Upcoming Appointments</h3>
+                        <button class="edit-btn" onclick="location.href='bookings/bookings.html'">
+                            <i class="fas fa-plus"></i> Book New
+                        </button>
+                    </div>
+                    
+                    <div class="appointment-item">
+                        <div class="appointment-header">
+                            <span class="doctor-name">Loading...</span>
+                            <span class="appointment-date">Loading...</span>
+                        </div>
+                        <div class="appointment-type">Loading...</div>
+                        <div>
+                            <span class="appointment-status">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Prescriptions</h3>
+                        <button class="edit-btn">
+                            <i class="fas fa-eye"></i> View All
+                        </button>
+                    </div>
+                    
+                    <div class="prescription-item">
+                        <div class="prescription-icon">
+                            <i class="fas fa-prescription-bottle-alt"></i>
+                        </div>
+                        <div class="prescription-details">
+                            <div class="prescription-title">Loading...</div>
+                            <div class="prescription-date">Loading...</div>
+                        </div>
+                        <div class="prescription-actions">
+                            <button class="prescription-btn" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="prescription-btn" title="Print">
+                                <i class="fas fa-print"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+            <a href="contactus/contactus.html">Contact Us</a>
+            <a href="about dr/about dr.html">About Us</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Skinfluence Dermatology. All rights reserved.</p>
+            <p>Follow us on social media for updates!</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize AuthService if available
+            if (typeof AuthService !== 'undefined') {
+                AuthService.updateAuthUI();
+            }
+
+            // Check if user is logged in
+            const loggedInUser = localStorage.getItem("loggedUser") 
+                ? JSON.parse(localStorage.getItem("loggedUser")) 
+                : null;
+
+            if (!loggedInUser) {
+                // Redirect to login if not logged in
+                window.location.href = "login/login.html?redirect=" + encodeURIComponent("myacc.html");
+                return;
+            }
+
+            // Update profile information
+            updateProfileInfo(loggedInUser);
+            
+            // Load appointments
+            loadAppointments(loggedInUser);
+            
+            // Load payment history
+            loadPaymentHistory(loggedInUser);
+
+            // Tab Switching Functionality
+            const tabs = document.querySelectorAll(".tab");
+            tabs.forEach((tab) => {
+                tab.addEventListener("click", function() {
+                    // Remove active class from all tabs
+                    tabs.forEach((t) => t.classList.remove("active"));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add("active");
+                    
+                    // Hide all tab contents
+                    document.querySelectorAll(".tab-content").forEach((content) => {
+                        content.classList.remove("active");
+                    });
+                    
+                    // Show the corresponding tab content
+                    const tabId = this.getAttribute("data-tab");
+                    document.getElementById(`${tabId}-content`).classList.add("active");
+                });
+            });
+
+            // Profile Icon Dropdown Toggle
+            const profileIcon = document.getElementById("profileIcon");
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            
+            if (profileIcon && dropdownMenu) {
+                profileIcon.addEventListener("click", function(event) {
+                    event.stopPropagation();
+                    dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+                });
+                
+                // Hide the dropdown menu if clicking anywhere outside
+                document.addEventListener("click", function() {
+                    if (dropdownMenu) {
+                        dropdownMenu.style.display = "none";
+                    }
+                });
+            }
+
+            // Save preferences functionality
+            document.getElementById("savePreferences").addEventListener("click", function() {
+                const preferences = {
+                    emailNotifications: document.getElementById("emailNotifications").checked,
+                    appointmentReminders: document.getElementById("appointmentReminders").checked,
+                    marketingEmails: document.getElementById("marketingEmails").checked,
+                    twoFactorAuth: document.getElementById("twoFactorAuth").checked,
+                    dataSharing: document.getElementById("dataSharing").checked
+                };
+                
+                // Save preferences to user data
+                if (loggedInUser) {
+                    loggedInUser.preferences = preferences;
+                    localStorage.setItem("loggedUser", JSON.stringify(loggedInUser));
+                    
+                    // Update doctors array as well
+                    const doctorsData = localStorage.getItem("doctors")
+                        ? JSON.parse(localStorage.getItem("doctors"))
+                        : [];
+                    
+                    if (doctorsData.length > 0) {
+                        const userIndex = doctorsData.findIndex(user => user.email === loggedInUser.email);
+                        if (userIndex !== -1) {
+                            doctorsData[userIndex].preferences = preferences;
+                            localStorage.setItem("doctors", JSON.stringify(doctorsData));
+                        }
+                    }
+                    
+                    alert("Your preferences have been saved!");
+                }
+            });
+        });
+
+        // Function to update profile information
+        function updateProfileInfo(user) {
+            // Set profile name
+            document.getElementById("profileName").textContent = user.name || "User";
+            
+            // Set profile email
+            document.getElementById("profileEmail").textContent = user.email || "No email provided";
+            
+            // Set member since date
+            const memberSince = user.registeredOn 
+                ? new Date(user.registeredOn).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                : "Unknown";
+            document.getElementById("profileMemberSince").textContent = memberSince;
+            
+            // Set appointment count
+            const appointmentCount = user.appoitment ? user.appoitment.length : 0;
+            document.getElementById("appointmentCount").textContent = appointmentCount;
+            
+            // Set profile image (either initials or actual image if available)
+            const profileImage = document.getElementById("profileImage");
+            if (user.profileImage) {
+                profileImage.innerHTML = `<img src="${user.profileImage}" alt="${user.name}">`;
+            } else {
+                // Get initials
+                const initials = user.name 
+                    ? user.name.split(' ').map(name => name[0]).join('')
+                    : "U";
+                profileImage.textContent = initials;
+            }
+            
+            // Set preferences if available
+            if (user.preferences) {
+                document.getElementById("emailNotifications").checked = user.preferences.emailNotifications !== false;
+                document.getElementById("appointmentReminders").checked = user.preferences.appointmentReminders !== false;
+                document.getElementById("marketingEmails").checked = user.preferences.marketingEmails !== false;
+                document.getElementById("twoFactorAuth").checked = user.preferences.twoFactorAuth === true;
+                document.getElementById("dataSharing").checked = user.preferences.dataSharing !== false;
+            }
+        }
+
+        // ...existing functions for loadAppointments and loadPaymentHistory...
+    </script>
+</body>
+</html>

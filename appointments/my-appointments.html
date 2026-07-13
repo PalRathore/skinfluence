@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Appointments - Skinfluence Dermatology</title>
+    <link rel="stylesheet" href="../Homepage/home.css" />
+    <script src="../js/auth-service.js" defer></script>
+    <style>
+      /* Base styles for appointments page */
+      .main-content {
+        margin: 40px auto;
+        max-width: 1000px;
+        padding: 0 20px;
+      }
+
+      .appointments-container {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-bottom: 40px;
+      }
+
+      .page-title {
+        color: #1e3c72;
+        font-size: 28px;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 700;
+      }
+
+      /* Tabs */
+      .appointment-tabs {
+        display: flex;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .tab {
+        padding: 12px 25px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #6c757d;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .tab.active {
+        color: #1e3c72;
+      }
+
+      .tab.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background-color: #1e3c72;
+        border-radius: 3px 3px 0 0;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Empty state */
+      .empty-state {
+        text-align: center;
+        padding: 40px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 30px;
+      }
+
+      .empty-state img {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 20px;
+        opacity: 0.7;
+      }
+
+      .empty-state h3 {
+        color: #495057;
+        margin-bottom: 15px;
+        font-size: 20px;
+      }
+
+      .empty-state p {
+        color: #6c757d;
+        margin-bottom: 25px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Appointment cards */
+      .appointments-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .appointment-card {
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        display: flex;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border-left: 5px solid #1e3c72;
+      }
+
+      .appointment-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .appointment-status {
+        width: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-right: 20px;
+        border-right: 1px solid #e9ecef;
+        margin-right: 20px;
+      }
+
+      .status-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 10px;
+        color: white;
+      }
+
+      .status-icon.confirmed {
+        background-color: #4caf50;
+      }
+
+      .status-icon.pending {
+        background-color: #ff9800;
+      }
+
+      .status-icon.cancelled {
+        background-color: #f44336;
+      }
+
+      .status-icon.completed {
+        background-color: #2196f3;
+      }
+
+      .status-text {
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .status-text.confirmed {
+        color: #4caf50;
+      }
+
+      .status-text.pending {
+        color: #ff9800;
+      }
+
+      .status-text.cancelled {
+        color: #f44336;
+      }
+
+      .status-text.completed {
+        color: #2196f3;
+      }
+
+      .appointment-details {
+        flex: 1;
+      }
+
+      .appointment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .appointment-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e3c72;
+      }
+
+      .appointment-date {
+        font-size: 14px;
+        font-weight: 600;
+        color: #6c757d;
+        padding: 5px 12px;
+        background-color: #e9ecef;
+        border-radius: 20px;
+      }
+
+      .appointment-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .info-label {
+        font-size: 13px;
+        color: #6c757d;
+        margin-bottom: 3px;
+      }
+
+      .info-value {
+        font-size: 15px;
+        font-weight: 600;
+        color: #343a40;
+      }
+
+      .appointment-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .action-button {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .action-button.reschedule {
+        background-color: #e9ecef;
+        color: #495057;
+      }
+
+      .action-button.cancel {
+        background-color: #ffebee;
+        color: #f44336;
+      }
+
+      .action-button.download {
+        background-color: #e3f2fd;
+        color: #1e3c72;
+      }
+
+      .action-button.join {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .action-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .action-button.reschedule:hover {
+        background-color: #dee2e6;
+      }
+
+      .action-button.cancel:hover {
+        background-color: #ffcdd2;
+      }
+
+      .action-button.download:hover {
+        background-color: #bbdefb;
+      }
+
+      .action-button.join:hover {
+        background-color: #43a047;
+      }
+
+      /* Cancel Confirmation Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal-content {
+        background-color: white;
+        border-radius: 12px;
+        padding: 30px;
+        width: 400px;
+        max-width: 90%;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        animation: scaleIn 0.3s ease;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .modal-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: #ffebee;
+        color: #f44336;
+        font-size: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+      }
+
+      .modal-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #343a40;
+      }
+
+      .modal-text {
+        color: #6c757d;
+        margin-bottom: 25px;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .modal-button {
+        padding: 10px 25px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+      .modal-button.cancel {
+        background-color: #e9ecef;
+        color: #495057;
+      }
+
+      .modal-button.confirm {
+        background-color: #f44336;
+        color: white;
+      }
+
+      .modal-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Book new appointment button */
+      .new-appointment-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #1e3c72;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        margin-top: 20px;
+      }
+
+      .new-appointment-btn:hover {
+        background-color: #2a5298;
+        box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
+        transform: translateY(-2px);
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .appointments-container {
+          padding: 20px;
+        }
+
+        .appointment-card {
+          flex-direction: column;
+        }
+
+        .appointment-status {
+          width: 100%;
+          flex-direction: row;
+          padding-right: 0;
+          padding-bottom: 15px;
+          border-right: none;
+          margin-right: 0;
+          border-bottom: 1px solid #e9ecef;
+          margin-bottom: 15px;
+          gap: 15px;
+        }
+
+        .status-icon {
+          margin-bottom: 0;
+        }
+
+        .appointment-info {
+          grid-template-columns: 1fr;
+        }
+
+        .appointment-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .appointment-actions {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar -->
+    <header>
+      <div class="top-bar">
+        <!-- Contact Information -->
+        <div class="contact-info">
+          <span>📞 0731-123456</span>
+          <!-- Phone number -->
+          <span
+            ><a href="mailto:skinfluence@gmail.com"
+              >✉️ skinfluence@gmail.com</a
+            ></span
+          >
+          <!-- Email -->
+          <span>🕐 12 am to 8 pm</span>
+          <!-- Working hours -->
+        </div>
+        <!-- Social Media Icons -->
+        <div class="social-icons">
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            aria-label="Facebook"
+          >
+            <img
+              src="../Homepage/facebook.png"
+              alt="Facebook"
+              onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124010.png'"
+              width="24"
+              height="24"
+            />
+          </a>
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            aria-label="Instagram"
+          >
+            <img
+              src="../Homepage/instagram.png"
+              alt="Instagram"
+              onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174855.png'"
+              width="24"
+              height="24"
+            />
+          </a>
+          <a
+            href="https://www.whatsapp.com"
+            target="_blank"
+            aria-label="WhatsApp"
+          >
+            <img
+              src="../Homepage/whatsapp.png"
+              alt="WhatsApp"
+              onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124034.png'"
+              width="24"
+              height="24"
+            />
+          </a>
+          <a
+            href="https://www.youtube.com"
+            target="_blank"
+            aria-label="YouTube"
+          >
+            <img
+              src="../Homepage/youtube.png"
+              alt="YouTube"
+              onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174883.png'"
+              width="24"
+              height="24"
+            />
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+      <!-- Logo Section -->
+      <div class="logo">
+        <a href="../Homepage/index.html"
+          ><img
+            src="../Homepage/skinfluence_logo-removebg-preview.png"
+            alt="Skinfluence Logo"
+        /></a>
+      </div>
+      <!-- Navigation Links -->
+      <ul>
+        <li><a href="../about dr/about dr.html">About Us</a></li>
+        <li><a href="../bookings/bookings.html">Bookings</a></li>
+        <li><a href="../Homepage/index.html#features">Explore</a></li>
+        <li><a href="../contactus/contactus.html">Contact Us</a></li>
+      </ul>
+
+      <!-- Authentication & Profile Section -->
+      <div class="auth">
+        <a href="../login/login.html" class="login">Login</a>
+        <a href="../login/login.html" class="login">Signup</a>
+        <div class="profile-container">
+          <img
+            src="../Homepage/profile icon.png"
+            alt="Profile Icon"
+            id="profileIcon"
+          />
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="../myacc.html">My Account</a>
+            <a href="../appointments/my-appointments.html">My Appointments</a>
+            <a href="../contactus/contactus.html">Help</a>
+            <a href="#" id="logoutBtn">Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="appointments-container">
+        <h1 class="page-title">My Appointments</h1>
+
+        <!-- Appointment Tabs -->
+        <div class="appointment-tabs">
+          <div class="tab active" data-tab="upcoming">Upcoming</div>
+          <div class="tab" data-tab="past">Past Appointments</div>
+          <div class="tab" data-tab="cancelled">Cancelled</div>
+        </div>
+
+        <!-- Upcoming Appointments Tab -->
+        <div class="tab-content active" id="upcoming-content">
+          <div class="appointments-list" id="upcoming-appointments">
+            <!-- Appointments will be dynamically populated here -->
+          </div>
+
+          <div class="text-center">
+            <button
+              class="new-appointment-btn"
+              onclick="window.location.href='../registration/registration.html'"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                />
+              </svg>
+              Book New Appointment
+            </button>
+          </div>
+        </div>
+
+        <!-- Past Appointments Tab -->
+        <div class="tab-content" id="past-content">
+          <div class="appointments-list" id="past-appointments">
+            <!-- Past appointments will be dynamically populated here -->
+          </div>
+        </div>
+
+        <!-- Cancelled Appointments Tab -->
+        <div class="tab-content" id="cancelled-content">
+          <div class="appointments-list" id="cancelled-appointments">
+            <!-- Cancelled appointments will be dynamically populated here -->
+          </div>
+
+          <!-- Empty State for Cancelled Tab (shown when no cancelled appointments) -->
+          <div class="empty-state" id="cancelled-empty" style="display: none">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/8364/8364370.png"
+              alt="No cancelled appointments"
+            />
+            <h3>No Cancelled Appointments</h3>
+            <p>
+              You don't have any cancelled appointments. All your appointments
+              are active or completed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cancellation Confirmation Modal -->
+    <div class="modal" id="cancel-modal">
+      <div class="modal-content">
+        <div class="modal-icon">✕</div>
+        <h3 class="modal-title">Cancel Appointment?</h3>
+        <p class="modal-text">
+          Are you sure you want to cancel this appointment? This action cannot
+          be undone.
+        </p>
+        <div class="modal-actions">
+          <button class="modal-button cancel" id="cancel-no">
+            No, Keep it
+          </button>
+          <button class="modal-button confirm" id="cancel-yes">
+            Yes, Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+      <div class="footer-links">
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms-and-conditions.html">Terms &amp; Conditions</a>
+        <a href="../contactus/contactus.html">Contact Us</a>
+        <a href="../about dr/about dr.html">About Us</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Skinfluence Dermatology. All rights reserved.</p>
+        <p>Follow us on social media for updates!</p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const upcomingAppointmentsContainer = document.getElementById("upcoming-appointments");
+        const pastAppointmentsContainer = document.getElementById("past-appointments");
+        const cancelledAppointmentsContainer = document.getElementById("cancelled-appointments");
+
+        // Get user data from localStorage
+        const loggedInUserData = localStorage.getItem("loggedUser")
+          ? JSON.parse(localStorage.getItem("loggedUser"))
+          : {};
+
+        const appointmentData = loggedInUserData?.appoitment || [];
+
+        // Clear any example appointments
+        upcomingAppointmentsContainer.innerHTML = '';
+        
+        // Check if we have any appointments
+        if (appointmentData.length === 0) {
+          // Show empty state
+          const emptyMessage = document.createElement("div");
+          emptyMessage.className = "empty-state";
+          emptyMessage.innerHTML = `
+              <img src="https://cdn-icons-png.flaticon.com/512/6598/6598519.png" alt="No appointments">
+              <h3>No Upcoming Appointments</h3>
+              <p>You don't have any upcoming appointments. Book a new appointment to get started.</p>
+          `;
+          upcomingAppointmentsContainer.appendChild(emptyMessage);
+        } else {
+          // Current date for comparison
+          const currentDate = new Date();
+          
+          // Arrays to store categorized appointments
+          const upcomingAppointments = [];
+          const pastAppointments = [];
+          const cancelledAppointments = [];
+          
+          // Process each appointment
+          appointmentData.forEach((data, index) => {
+            // Create a date object from the appointment date
+            const appointmentDate = new Date(data.date);
+            const appointmentId = `app-${index}`;
+            
+            // Create the appointment card using the same styling as the examples
+            const appointmentCard = document.createElement("div");
+            appointmentCard.className = "appointment-card";
+            appointmentCard.setAttribute("data-id", appointmentId);
+            
+            // Determine if appointment is past, future, or cancelled
+            let statusIcon, statusText, statusClass;
+            
+            if (data.status === "cancelled") {
+              statusIcon = "✕";
+              statusText = "Cancelled";
+              statusClass = "cancelled";
+              cancelledAppointments.push(appointmentCard);
+            } else if (appointmentDate < currentDate) {
+              statusIcon = "✓";
+              statusText = "Completed";
+              statusClass = "completed";
+              pastAppointments.push(appointmentCard);
+            } else {
+              statusIcon = "✓";
+              statusText = "Confirmed";
+              statusClass = "confirmed";
+              upcomingAppointments.push(appointmentCard);
+            }
+            
+            // Format the appointment date
+            const options = { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' };
+            const formattedDate = appointmentDate.toLocaleDateString('en-US', options);
+            
+            appointmentCard.innerHTML = `
+              <div class="appointment-status">
+                <div class="status-icon ${statusClass}">${statusIcon}</div>
+                <div class="status-text ${statusClass}">${statusText}</div>
+              </div>
+              <div class="appointment-details">
+                <div class="appointment-header">
+                  <div class="appointment-title">${data.service || "Dermatology Consultation"}</div>
+                  <div class="appointment-date">${formattedDate}</div>
+                </div>
+                <div class="appointment-info">
+                  <div class="info-item">
+                    <div class="info-label">Doctor</div>
+                    <div class="info-value">Dr. ${data.doctor || "Unknown"}</div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-label">Time</div>
+                    <div class="info-value">${data.time || "N/A"}</div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-label">Booking ID</div>
+                    <div class="info-value">SKF-${Math.floor(100000 + Math.random() * 900000)}</div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-label">Consultation Type</div>
+                    <div class="info-value">${data.consultationType || "In-Person"}</div>
+                  </div>
+                </div>
+                <div class="appointment-actions">
+                  ${statusClass === "cancelled" ? `
+                    <button class="action-button reschedule">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                      </svg>
+                      Book Again
+                    </button>
+                  ` : statusClass === "completed" ? `
+                    <button class="action-button download">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                      </svg>
+                      Download Report
+                    </button>
+                    <button class="action-button download">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                      </svg>
+                      View Prescription
+                    </button>
+                    <button class="action-button reschedule">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                      </svg>
+                      Book Follow-up
+                    </button>
+                  ` : `
+                    <button class="action-button reschedule">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                      </svg>
+                      Reschedule
+                    </button>
+                    <button class="action-button cancel" data-id="${appointmentId}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                      </svg>
+                      Cancel
+                    </button>
+                    <button class="action-button download">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                      </svg>
+                      Download
+                    </button>
+                    ${data.consultationType === "Online Video" ? `
+                    <button class="action-button join">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1-1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/>
+                      </svg>
+                      Join Video Call
+                    </button>
+                    ` : ''}
+                  `}
+                </div>
+              </div>
+            `;
+          });
+          
+          // Add appointments to their respective containers
+          upcomingAppointments.forEach(card => upcomingAppointmentsContainer.appendChild(card));
+          pastAppointments.forEach(card => pastAppointmentsContainer.appendChild(card));
+          cancelledAppointments.forEach(card => cancelledAppointmentsContainer.appendChild(card));
+          
+          // Show "empty state" if a category has no appointments
+          if (upcomingAppointments.length === 0) {
+            const emptyMessage = document.createElement("div");
+            emptyMessage.className = "empty-state";
+            emptyMessage.innerHTML = `
+                <img src="https://cdn-icons-png.flaticon.com/512/6598/6598519.png" alt="No appointments">
+                <h3>No Upcoming Appointments</h3>
+                <p>You don't have any upcoming appointments. Book a new appointment to get started.</p>
+            `;
+            upcomingAppointmentsContainer.appendChild(emptyMessage);
+          }
+          
+          if (pastAppointments.length === 0) {
+            const emptyMessage = document.createElement("div");
+            emptyMessage.className = "empty-state";
+            emptyMessage.innerHTML = `
+                <img src="https://cdn-icons-png.flaticon.com/512/6598/6598519.png" alt="No past appointments">
+                <h3>No Past Appointments</h3>
+                <p>You haven't completed any appointments yet.</p>
+            `;
+            pastAppointmentsContainer.appendChild(emptyMessage);
+          }
+          
+          if (cancelledAppointments.length === 0) {
+            document.getElementById("cancelled-empty").style.display = "block";
+          }
+        }
+
+        // Tab Switching Functionality
+        const tabs = document.querySelectorAll(".tab");
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            // Remove active class from all tabs
+            tabs.forEach((t) => t.classList.remove("active"));
+
+            // Add active class to clicked tab
+            this.classList.add("active");
+
+            // Hide all tab contents
+            document.querySelectorAll(".tab-content").forEach((content) => {
+              content.classList.remove("active");
+            });
+
+            // Show the corresponding tab content
+            const tabId = this.getAttribute("data-tab");
+            document.getElementById(`${tabId}-content`).classList.add("active");
+          });
+        });
+        
+        // Rest of your existing code for cancellation modal, etc.
+      });
+    </script>
+  </body>
+</html>
+``` 

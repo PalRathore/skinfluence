@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms & Conditions - Skinfluence Dermatology</title>
+  <link rel="stylesheet" href="Homepage/home.css">
+  <style>
+    .content-container {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #1e3c72;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+    .print-btn {
+      background-color: #1e3c72;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .print-btn:hover {
+      background-color: #4682B4;
+    }
+    .section-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .section-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0,0,0,0.15);
+    }
+    
+    .section-card h2 {
+      color: #1e3c72;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .last-updated {
+      text-align: right;
+      font-style: italic;
+      color: #7f8c8d;
+      margin-top: 1.5rem;
+    }
+  </style>
+  <script src="js/auth-service.js" defer></script>
+</head>
+<body>
+  <!-- Top Bar -->
+  <header>
+    <div class="top-bar">
+      <!-- Contact Information -->
+      <div class="contact-info">
+        <span>📞 0731-123456</span> <!-- Phone number -->
+        <span><a href="mailto:skinfluence@gmail.com">✉️ skinfluence@gmail.com</a></span> <!-- Email -->
+        <span>🕐 12 am to 8 pm</span> <!-- Working hours -->
+      </div>
+      <!-- Social Media Icons -->
+      <div class="social-icons">
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+          <img src="Homepage/facebook.png" alt="Facebook" onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124010.png'" width="24" height="24">
+        </a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+          <img src="Homepage/instagram.png" alt="Instagram" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174855.png'" width="24" height="24">
+        </a>
+        <a href="https://www.whatsapp.com" target="_blank" aria-label="WhatsApp">
+          <img src="Homepage/whatsapp.png" alt="WhatsApp" onerror="this.src='https://cdn-icons-png.flaticon.com/512/124/124034.png'" width="24" height="24">
+        </a>
+        <a href="https://www.youtube.com" target="_blank" aria-label="YouTube">
+          <img src="Homepage/youtube.png" alt="YouTube" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174883.png'" width="24" height="24">
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <!-- Logo Section -->
+    <div class="logo">
+      <a href="Homepage/index.html"><img src="Homepage/skinfluence_logo-removebg-preview.png" alt="Skinfluence Logo"></a>
+    </div>
+    <!-- Navigation Links -->
+    <ul>
+      <li><a href="about dr/about dr.html">About Us</a></li>
+      <li><a href="/registration/registration.html">Bookings</a></li>
+      <li><a href="Homepage/index.html#explore">Explore</a></li>
+      <li><a href="/contactus/contactus.html">Contact Us</a></li>
+    </ul>
+    
+    <!-- Authentication & Profile Section -->
+    <div class="auth">
+      <a href="login/login.html" class="login">Login</a>
+      <a href="login/login.html" class="login">Signup</a>
+      <div class="profile-container">
+        <img src="Homepage/profile icon.png" alt="Profile Icon" id="profileIcon">
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="myacc.html">My Account</a>
+          <a href="#">My Appointments</a>
+          <a href="#">Help</a>
+          <a href="#">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-container">
+    <h1>Terms & Conditions</h1>
+    
+    <div class="section-card">
+      <h2>Service Agreement</h2>
+      <p>By using Skinfluence, you agree to these terms. We provide dermatological telehealth services with inherent limitations and are not a substitute for emergency medical care.</p>
+    </div>
+    
+    <div class="section-card">
+      <h2>Appointments</h2>
+      <p>Provide accurate information and give 24-hour notice for cancellations. Late cancellations may incur fees. Payment is required at booking time.</p>
+    </div>
+    
+    <div class="section-card">
+      <h2>Privacy</h2>
+      <p>We collect only necessary medical information, secure data with encryption, and never share your information with third parties except as required by law.</p>
+      <a href="privacy.html" class="print-btn" style="display: inline-block; text-decoration: none;">Privacy Policy</a>
+    </div>
+    
+    <div class="section-card">
+      <h2>Liability</h2>
+      <p>Services provided "as is" without warranties. We're not liable for technical failures, treatment outcomes, or damages resulting from use of our services.</p>
+    </div>
+    
+    <div class="section-card">
+      <h2>Contact Us</h2>
+      <p>Email: support@skinfluence.com</p>
+      <p>Phone: (555) 123-4567</p>
+    </div>
+    
+    <p class="last-updated">Last Updated: April 13, 2025</p>
+    <button class="print-btn" onclick="window.print()">Print Terms</button>
+  </div>
+
+  <footer>
+    <div class="footer-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+      <a href="contactus/contactus.html">Contact Us</a>
+      <a href="about dr/about dr.html">About Us</a>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Skinfluence Dermatology. All rights reserved.</p>
+      <p>Follow us on social media for updates!</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof AuthService !== 'undefined') {
+        AuthService.updateAuthUI();
+      }
+      
+      // Profile dropdown toggle
+      const profileIcon = document.getElementById('profileIcon');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      
+      if (profileIcon && dropdownMenu) {
+        profileIcon.addEventListener('click', function(e) {
+          e.stopPropagation();
+          dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        // Close dropdown when clicking elsewhere
+        document.addEventListener('click', function(e) {
+          if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
+          }
+        });
+      }
+      
+      // Logout functionality
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async function(e) {
+          e.preventDefault();
+          if (typeof AuthService !== 'undefined') {
+            await AuthService.logout();
+            window.location.reload();
+          }
+        });
+      }
+      
+      // Header visibility on scroll
+      let lastScrollPosition = 0;
+      const header = document.querySelector('header');
+      
+      window.addEventListener('scroll', () => {
+        const currentScrollPosition = window.pageYOffset;
+        
+        if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 150) {
+          header.classList.add('header-hidden');
+        } else {
+          header.classList.remove('header-hidden');
+        }
+        
+        lastScrollPosition = currentScrollPosition;
+      });
+
+      // Initialize cards with lower opacity
+      const sections = document.querySelectorAll('.section-card');
+      sections.forEach(section => {
+        section.style.opacity = '0.8';
+        section.style.transition = 'opacity 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease';
+      });
+      
+      // Add hover effects
+      sections.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-5px)';
+          this.style.boxShadow = '0 0 25px rgba(0,0,0,0.15)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+          this.style.boxShadow = '0 0 20px rgba(0,0,0,0.1)';
+        });
+      });
+    });
+
+    // Add animation on scroll for section cards
+    window.addEventListener('scroll', function() {
+      const sections = document.querySelectorAll('.section-card');
+      sections.forEach(section => {
+        const position = section.getBoundingClientRect();
+        if(position.top < window.innerHeight && position.bottom >= 0) {
+          section.style.opacity = '1';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

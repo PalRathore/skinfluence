@@ -1,0 +1,575 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    
+/*==========================
+  Global Styles
+==========================*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Resets margins and paddings */
+}
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  line-height: 1.6;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/*==========================
+  Header & Top Bar
+==========================*/
+header {
+  position: relative;
+  transition: transform 0.3s ease-in-out; /* Smooth transition for hiding header */
+}
+.header-hidden {
+  transform: translateY(-100%); /* Moves header out of view when scrolling */
+}
+.top-bar {
+  background: linear-gradient(to left, #b1b4b6, #7ea5cb);
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.contact-info {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.social-icons {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.social-icons img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+  opacity: 0.8;
+}
+.social-icons img:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+/*==========================
+  Navigation Bar
+==========================*/
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  backdrop-filter: blur(5px);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  max-height: 80px;
+}
+.logo img {
+  width: 275px;
+  height: auto;
+  /*
+    ADJUST LOGO POSITION:
+    Negative translateY moves it UP, positive moves it DOWN.
+    Increase/decrease -10px as needed.
+  */
+  transform: translateY(-10px);
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  padding: 0;
+  margin: 0;
+}
+nav ul li a {
+  color: #333;
+  font-weight: 600;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+nav ul li a:hover {
+  color: #1e3c72;
+}
+.auth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Add styles for the user name display */
+.user-name {
+  font-weight: 600;
+  color: #1e3c72;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.auth a {
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.login {
+  background-color: transparent;
+  border: 2px solid #1e3c72;
+  color: #1e3c72;
+}
+.signup {
+  background-color: #1e3c72;
+  color: #fff;
+}
+.auth img {
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+/* Dropdown Menu for Profile Icon */
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-menu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  min-width: 150px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  z-index: 200;
+}
+.dropdown-menu a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+}
+.dropdown-menu a:hover {
+  background-color: #f1f1f1;
+}
+.dropdown-menu a:last-child {
+  border-bottom: none;
+}
+
+/*==========================
+  Hero Section
+==========================*/
+.hero {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  /* Control overall hero section height */
+  min-height: 600px;
+  max-height: 800px;
+  /*
+    BACKGROUND:
+    - "contain" ensures the entire image is visible,
+    - "left top" anchors it to the top-left corner.
+  */
+  background: url("herotrial1.png") no-repeat left top;
+  background-size: contain;
+}
+
+.hero-container {
+  position: relative;
+  display: grid;
+  /* Two columns: left side for the image, right side for text */
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  /*
+    SHIFT TEXT TOWARD THE TOP:
+    align-items: start places items at the top of each column
+  */
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.hero-text {
+  /* Place text in the second (right) column */
+  grid-column: 2;
+  /*
+    justify-self: end pushes the text container 
+    to the right side of column 2
+  */
+  justify-self: end;
+  text-align: left; /* The text lines remain left-aligned */
+  /*
+    Removing padding-right: -100px because negative padding is unusual
+    If you need extra spacing, use margin or positive padding instead.
+  */
+  /* Add some top margin to push text down if needed */
+  margin-top: 40px;
+  /* Limit the width of the text block so it doesn't stretch too far */
+  max-width: 900px;
+}
+
+.hero-text h1 {
+  font-size: 3.5rem;
+  color: #1e3c72;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  /* Placeholder content */
+  content: "Welcome to Skinfluence Dermatology. Your one-stop solution for all skin-related concerns.";
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.explore-btn, .book-btn {
+  padding: 15px 40px;
+  font-size: 16px;
+  border-radius: 50px; /* Making both buttons pill-shaped */
+  border: none;
+  font-weight: 500;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.explore-btn {
+  background-color: rgb(232, 230, 230);
+  color: black;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.book-btn {
+  background-color: #FF6B6B;
+  color: white;
+}
+
+.explore-btn:hover, .book-btn:hover {
+  transform: scale(1.05);
+  background-color: #1e3c72;
+  color: #fff;
+  box-shadow: 0 6px 15px rgba(30, 60, 114, 0.3);
+}
+
+@media (max-width: 900px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+    align-items: center; /* or start, depending on preference */
+  }
+  .hero-text {
+    grid-row: 1;
+    margin-top: 20px; /* Adjust as needed for spacing */
+    justify-self: center; /* Center the text container in mobile view */
+    max-width: 100%;
+  }
+}
+
+/*==========================
+  Features Section
+==========================*/
+.features {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 40px;
+  background-color: #f9f9f9;
+  width: 90%;
+  max-width: 1200px;
+  margin: 40px auto;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  gap: 20px;
+}
+.feature {
+  flex: 1 1 200px;
+  max-width: 250px;
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  transition: transform 0.3s, background-color 0.3s;
+}
+.feature:hover {
+  transform: scale(1.05);
+  background-color: #e0f2ff;
+}
+.features .feature img {
+  display: block;
+  margin: 0 auto 10px;
+  width: 50px;
+  height: 50px;
+}
+.feature h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e3c72;
+}
+
+/*==========================
+  Why Choose Skinfluence Section
+==========================*/
+.why-choose {
+  padding: 60px 10%;
+  background-color: #fff;
+  text-align: center;
+}
+.why-choose h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #1e3c72;
+}
+.step-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.step-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  padding: 20px;
+  max-width: 270px;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s, background-color 0.3s;
+  min-height: 300px; /* Ensures all cards have the same minimum height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.step-card:hover {
+  transform: translateY(-5px);
+  background-color: #e0f2ff;
+  box-shadow: 0 10px 18px rgba(30, 60, 114, 0.15);
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.icon-container img {
+  width: 60px;
+  height: 60px;
+}
+.step-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #1e3c72;
+}
+.step-card p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+}
+.arrow {
+  font-size: 2rem;
+  color: #1e3c72;
+  transition: transform 0.2s;
+}
+.arrow:hover {
+  transform: scale(1.2);
+}
+@media (max-width: 900px) {
+  .step-flow {
+    flex-direction: column;
+  }
+  .arrow {
+    display: none;
+  }
+}
+
+/*==========================
+  FAQ Section
+==========================*/
+.faq {
+  padding: 60px 10%;
+  background-color: #f9f9f9;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.faq h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #1e3c72;
+}
+.faq-item {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+}
+.faq-item summary {
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+.faq-item[open] summary {
+  color: #1e3c72;
+}
+.faq-item p {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #555;
+}
+
+/*==========================
+  Parallax Section (Promotional Content)
+==========================*/
+.fiximg {
+  position: relative;
+  height: 700px;
+  background: url("parallax.png") no-repeat center center/cover; /* Parallax background image */
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.parallax-overlay {
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay for readability */
+  border-radius: 10px;
+}
+.parallax-overlay h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+.parallax-overlay p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+/*==========================
+  Meet Our Experts Section
+==========================*/
+.meet-experts {
+  padding: 60px 10%;
+  background-color: #fff;
+  text-align: center;
+}
+.meet-experts h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #1e3c72;
+}
+.experts-container {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.expert-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  width: 250px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s, background-color 0.3s;
+}
+.expert-card:hover {
+  transform: translateY(-5px);
+  background-color: #e0f2ff;
+}
+.expert-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+.expert-card h3 {
+  font-size: 1.2rem;
+  color: #1e3c72;
+  margin-bottom: 5px;
+}
+.expert-card p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/*==========================
+  Footer Section
+==========================*/
+footer {
+  background-color: #f0f0f0;
+  padding: 30px 10%;
+  color: #555;
+  /* If you want a footer background image, uncomment and change the file:
+     background: url('footer-bg.jpg') no-repeat center center/cover; */
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+.footer-links a {
+  color: #1e3c72;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+.footer-links a:hover {
+  color: #4682B4;
+}
+.footer-bottom {
+  text-align: center;
+  font-size: 14px;
+}
+
+/*==========================
+  Responsive Styles
+==========================*/
+@media (max-width: 900px) {
+  nav ul {
+    gap: 20px;
+  }
+}
